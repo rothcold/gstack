@@ -386,6 +386,12 @@ function processExternalHost(
     result = result.slice(0, bodyStart) + '\n' + safetyProse + '\n' + result.slice(bodyStart);
   }
 
+  // Inject host-specific boundary instruction
+  if (hostConfig.boundaryInstruction) {
+    const bodyStart = result.indexOf('\n---') + 4;
+    result = result.slice(0, bodyStart) + '\n> **Instruction:** ' + hostConfig.boundaryInstruction + '\n' + result.slice(bodyStart);
+  }
+
   // Config-driven path rewrites (order matters, replaceAll)
   for (const rewrite of hostConfig.pathRewrites) {
     result = result.replaceAll(rewrite.from, rewrite.to);
